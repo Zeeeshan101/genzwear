@@ -15,6 +15,10 @@ import { Navigate } from 'react-router-dom';
 
 import { useAuth } from './context/AuthContext';
 
+import PrivateRoute from './components/PrivateRoute'; // (for a resusable component that can also be used for role based access control in the future//)//
+
+
+
  
 function App() {
 
@@ -31,8 +35,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={ user ? <Cart /> : <Navigate to="/login"/>} />
-          <Route path="/orders" element={ user ? <Orders /> : <Navigate to="/login" />} />
+
+          {/* Private routes */}
+          <Route path="/cart" element={ <PrivateRoute> <Cart /></PrivateRoute> } />
+          <Route path="/orders" element={<PrivateRoute> <Orders /> </PrivateRoute>  } />
 
           <Route path="/thankyou" element={<ThankYou />} />
         </Routes>

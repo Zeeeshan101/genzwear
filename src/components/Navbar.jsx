@@ -50,7 +50,7 @@ function Navbar() {
           )}
 
           {token && (
-          <Link to="/orders" className="text-white text-md hover:text-purple-200">
+          <Link to="/orders" className="text-white text-md hover:text-purple-200 pr-2">
           Orders
          </Link>
           )}
