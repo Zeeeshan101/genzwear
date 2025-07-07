@@ -79,7 +79,8 @@ function Navbar() {
         <div className="flex items-center space-x-4">
           {token ? (
             <>
-              <span className="text-white hidden sm:inline-block text-sm sm:text-base">Hi, {name} 👋</span>
+              <span className="text-white text-sm sm:text-base">Hi, {name} 👋</span>
+
              <button
               onClick={handleLogout}
             className="bg-purple-100 text-purple-800 border border-purple-300 hover:bg-purple-200 px-4 py-1 rounded transition duration-200"
