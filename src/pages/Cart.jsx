@@ -50,6 +50,7 @@ function Cart() {
   };
 
   const handleCheckout = async () => {
+    
     const token = localStorage.getItem('token');
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/orders`, {}, {
@@ -94,7 +95,28 @@ function Cart() {
                 />
                 <div>
                   <h4 className="text-lg font-semibold text-gray-800">{item.productId.title}</h4>
-                  <p className="text-sm text-gray-600 mt-1">₹{item.productId.price} × {item.quantity}</p>
+
+               {/*showing unit price for each item*/} 
+               
+               <p className="text-sm text-gray-600">Price: ₹{item.productId.price}</p>
+
+
+              <div className="flex items-center gap-2 mt-1">
+              <button
+              className="bg-purple-200 text-purple-700 px-2 py-1 rounded"
+              onClick={() => handleQuantityChange(item.productId._id, item.quantity - 1)}
+              >−</button>
+
+              <span className="font-medium">{item.quantity}</span>
+
+              <button
+             className="bg-purple-500 text-white px-2 py-1 rounded"
+             onClick={() => handleQuantityChange(item.productId._id, item.quantity + 1)}
+             >+</button>
+            </div>
+
+
+                  
                   <p className="text-sm text-purple-700 font-bold mt-1">
                     ₹{item.productId.price * item.quantity}
                   </p>
