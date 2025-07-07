@@ -40,9 +40,10 @@ function Cart() {
 // Function to handle quantity change// new* // 
 
 const handleQuantityChange = async (productId, newQuantity) => {
-  if (newQuantity < 1) 
-      handleRemove(productId);
-    return; // remove product from cart if quantity is less than 1 //
+  if (newQuantity < 1) {
+    await handleRemove(productId); // ✅ await and block
+    return;
+  } // remove product from cart if quantity is less than 1 //
 
   const token = localStorage.getItem('token');
   try {
