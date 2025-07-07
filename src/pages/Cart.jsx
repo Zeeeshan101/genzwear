@@ -44,7 +44,7 @@ const handleQuantityChange = async (productId, newQuantity) => {
 
   const token = localStorage.getItem('token');
   try {
-    const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/cart`, {
+    const res = await axios.patch(`${import.meta.env.VITE_API_URL}/api/cart`, {
       productId,
       quantity: newQuantity,
     }, {
