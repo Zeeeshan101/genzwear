@@ -51,7 +51,7 @@ const handleQuantityChange = async (productId, newQuantity) => {
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    setCartItems(res.data.cart.products); // updated cart from backend
+    setCartItems(res.data.products); // updated cart from backend
   } catch (err) {
     console.error('Failed to update quantity:', err);
   }
