@@ -37,6 +37,28 @@ function Cart() {
     );
   };
 
+// Function to handle quantity change// new* // 
+
+const handleQuantityChange = async (productId, newQuantity) => {
+  if (newQuantity < 1) return; // optional: prevent zero quantity
+
+  const token = localStorage.getItem('token');
+  try {
+    const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/cart`, {
+      productId,
+      quantity: newQuantity,
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    setCartItems(res.data.cart.products); // updated cart from backend
+  } catch (err) {
+    console.error('Failed to update quantity:', err);
+  }
+};
+
+
+
   const handleRemove = async (productId) => {
     const token = localStorage.getItem('token');
     try {
