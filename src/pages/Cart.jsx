@@ -40,7 +40,9 @@ function Cart() {
 // Function to handle quantity change// new* // 
 
 const handleQuantityChange = async (productId, newQuantity) => {
-  if (newQuantity < 1) return; // optional: prevent zero quantity
+  if (newQuantity < 1) 
+      handleRemove(productId);
+    return; // remove product from cart if quantity is less than 1
 
   const token = localStorage.getItem('token');
   try {
@@ -123,19 +125,23 @@ const handleQuantityChange = async (productId, newQuantity) => {
                <p className="text-sm text-gray-600">Price: ₹{item.productId.price}</p>
 
 
-              <div className="flex items-center gap-2 mt-1">
-              <button
-              className="bg-purple-200 text-purple-700 px-2 py-1 rounded"
-              onClick={() => handleQuantityChange(item.productId._id, item.quantity - 1)}
-              >−</button>
+         < div className="flex items-center mt-2 space-x-2">
+         <button
+        className="w-8 h-8 flex items-center justify-center rounded-full bg-purple-200 text-purple-700 hover:bg-purple-300 transition"
+        onClick={() => handleQuantityChange(item.productId._id, item.quantity - 1)}
+        >  −   </button>
 
-              <span className="font-medium">{item.quantity}</span>
+        <span className="min-w-[24px] text-center text-base font-semibold text-gray-800">
+       {item.quantity}
+        </span>
 
               <button
-             className="bg-purple-500 text-white px-2 py-1 rounded"
-             onClick={() => handleQuantityChange(item.productId._id, item.quantity + 1)}
-             >+</button>
-            </div>
+        className="w-8 h-8 flex items-center justify-center rounded-full bg-purple-600 text-white hover:bg-purple-700 transition"
+        onClick={() => handleQuantityChange(item.productId._id, item.quantity + 1)}
+       >
+       +
+       </button>
+      </div>
 
 
                   
