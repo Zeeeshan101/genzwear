@@ -42,12 +42,11 @@ function Cart() {
 const handleQuantityChange = async (productId, newQuantity) => {
   if (newQuantity < 1) 
       handleRemove(productId);
-    return; // remove product from cart if quantity is less than 1
+    return; // remove product from cart if quantity is less than 1 //
 
   const token = localStorage.getItem('token');
   try {
     const res = await axios.patch(`${import.meta.env.VITE_API_URL}/api/cart/${productId}`, {
-      productId,
       quantity: newQuantity,
     }, {
       headers: { Authorization: `Bearer ${token}` }
