@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-
 import Loader from '../components/Loader';
 
 function Cart() {
@@ -24,7 +23,6 @@ function Cart() {
         setLoading(false);
       }
     };
-
     fetchCart();
   }, []);
 
@@ -37,29 +35,23 @@ function Cart() {
     );
   };
 
-// Function to handle quantity change// new* // 
-
-const handleQuantityChange = async (productId, newQuantity) => {
-  if (newQuantity < 1) {
-    await handleRemove(productId); // ✅ await and block
-    return;
-  } // remove product from cart if quantity is less than 1 //
-
-  const token = localStorage.getItem('token');
-  try {
-    const res = await axios.patch(`${import.meta.env.VITE_API_URL}/api/cart/${productId}`, {
-      quantity: newQuantity,
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    setCartItems(res.data.products); // updated cart from backend
-  } catch (err) {
-    console.error('Failed to update quantity:', err);
-  }
-};
-
-
+  const handleQuantityChange = async (productId, newQuantity) => {
+    if (newQuantity < 1) {
+      await handleRemove(productId);
+      return;
+    }
+    const token = localStorage.getItem('token');
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/api/cart/${productId}`,
+        { quantity: newQuantity },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCartItems(res.data.products);
+    } catch (err) {
+      console.error('Failed to update quantity:', err);
+    }
+  };
 
   const handleRemove = async (productId) => {
     const token = localStorage.getItem('token');
@@ -74,7 +66,6 @@ const handleQuantityChange = async (productId, newQuantity) => {
   };
 
   const handleCheckout = async () => {
-    
     const token = localStorage.getItem('token');
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/orders`, {}, {
@@ -89,84 +80,97 @@ const handleQuantityChange = async (productId, newQuantity) => {
   };
 
   return (
-    <div className="w-full px-4 sm:px-10 lg:px-24 py-10">
-      <h2 className="text-3xl sm:text-4xl font-bold text-purple-800 mb-10 text-center">
+    <div className="w-full px-4 sm:px-10 lg:px-24 py-10 bg-gray-50 min-h-screen">
+      <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-10 text-center">
         🛒 Your Shopping Cart
       </h2>
 
       {cartItems.length === 0 ? (
-        <div className="text-center bg-purple-50 border border-purple-100 p-10 rounded-lg shadow-sm">
+        <div className="text-center bg-white border border-gray-200 p-10 rounded-lg shadow-sm">
           <p className="text-lg text-gray-600">Looks like your cart is empty 🥲</p>
           <button
             onClick={() => navigate('/products')}
-            className="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition"
+            className="mt-4 px-5 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-md transition"
           >
             Browse Products
           </button>
         </div>
       ) : (
-        <div className="space-y-6">
-          {cartItems.map((item) => (
-            <div
-              key={item.productId._id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between border border-purple-100 bg-white p-5 rounded-lg shadow-sm"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={item.productId.image}
-                  alt={item.productId.title}
-                  className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded bg-gray-50"
-                />
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800">{item.productId.title}</h4>
-
-               {/*showing unit price for each item*/} 
-               
-               <p className="text-sm text-gray-600">Price: ₹{item.productId.price}</p>
-
-
-         < div className="flex items-center mt-2 space-x-2">
-         <button
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-purple-200 text-purple-700 hover:bg-purple-300 transition"
-        onClick={() => handleQuantityChange(item.productId._id, item.quantity - 1)}
-        >  −   </button>
-
-        <span className="min-w-[24px] text-center text-base font-semibold text-gray-800">
-       {item.quantity}
-        </span>
-
-              <button
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-purple-600 text-white hover:bg-purple-700 transition"
-        onClick={() => handleQuantityChange(item.productId._id, item.quantity + 1)}
-       >
-       +
-       </button>
-      </div>
-
-
-                  
-                  <p className="text-sm text-purple-700 font-bold mt-1">
-                    ₹{item.productId.price * item.quantity}
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => handleRemove(item.productId._id)}
-                className="mt-3 sm:mt-0 bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-sm rounded-md"
+        <div className="grid lg:grid-cols-3 gap-8">
+          
+          {/* Cart Items */}
+          <div className="lg:col-span-2 space-y-6">
+            {cartItems.map((item) => (
+              <div
+                key={item.productId._id}
+                className="flex flex-col sm:flex-row sm:items-center justify-between border border-gray-200 bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition"
               >
-                ❌ Remove
-              </button>
-            </div>
-          ))}
+                <div className="flex items-center gap-5">
+                  <img
+                    src={item.productId.image}
+                    alt={item.productId.title}
+                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded bg-gray-50"
+                  />
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900">{item.productId.title}</h4>
+                    <p className="text-sm text-gray-500">₹{item.productId.price} each</p>
 
-          <div className="bg-purple-50 border border-purple-200 p-6 rounded-lg mt-8 shadow-inner text-right">
-            <h3 className="text-xl font-semibold text-purple-800 mb-4">
-              Grand Total: ₹{getTotal()}
+                    {/* Quantity Selector */}
+                    <div className="flex items-center mt-3 space-x-2">
+                      <button
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                        onClick={() => handleQuantityChange(item.productId._id, item.quantity - 1)}
+                      >
+                        −
+                      </button>
+                      <span className="min-w-[24px] text-center text-base font-semibold text-gray-900">
+                        {item.quantity}
+                      </span>
+                      <button
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-900 text-white hover:bg-gray-800 transition"
+                        onClick={() => handleQuantityChange(item.productId._id, item.quantity + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <p className="text-sm text-amber-600 font-semibold mt-2">
+                      ₹{item.productId.price * item.quantity}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => handleRemove(item.productId._id)}
+                  className="mt-4 sm:mt-0 bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-sm rounded-md"
+                >
+                  ❌ Remove
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Summary Box */}
+          <div className="bg-white border border-gray-200 p-6 rounded-lg shadow-md h-fit sticky top-24">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              Order Summary
             </h3>
+            <div className="flex justify-between text-gray-700 mb-2">
+              <span>Subtotal</span>
+              <span>₹{getTotal()}</span>
+            </div>
+            <div className="flex justify-between text-gray-700 mb-4">
+              <span>Shipping</span>
+              <span className="text-green-600">Free</span>
+            </div>
+            <hr className="my-4" />
+            <div className="flex justify-between font-semibold text-gray-900 text-lg">
+              <span>Total</span>
+              <span>₹{getTotal()}</span>
+            </div>
             <button
               onClick={handleCheckout}
-              className="bg-purple-700 hover:bg-purple-800 text-white px-8 py-3 rounded-md font-semibold text-base transition"
+              className="mt-6 w-full bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-md font-semibold text-base transition"
             >
               ✅ Place Order
             </button>

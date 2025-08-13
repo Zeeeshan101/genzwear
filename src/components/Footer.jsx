@@ -1,8 +1,8 @@
 function Footer() {
   return (
-    <footer className="bg-rose-100 text-purple-800 text-center py-4 mt-10 shadow-inner">
-      <p className="text-sm tracking-wide font-medium">
-        &copy; {new Date().getFullYear()} GenZ Store
+    <footer className="bg-black text-white text-center py-4 mt-10 shadow-inner border-t border-gray-700">
+      <p className="text-sm tracking-wide font-light">
+        &copy; {new Date().getFullYear()} <span className="font-semibold text-gray-200">GenZ Store</span> — All Rights Reserved
       </p>
     </footer>
   );

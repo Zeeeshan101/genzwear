@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import GlowingButton from '../components/GlowingButton';
 import FancyButton from '../components/FancyButton';
-
 
 function ThankYou() {
   const navigate = useNavigate();
@@ -18,34 +16,27 @@ function ThankYou() {
         color: '#fff'
       }}
     >
-      <h1 className="text-3xl md:text-5xl font-bold text-white-600 mb-6">
-         Thank you for placing your order
+      {/* Thank You Heading */}
+      <h1 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
+        Thank You for Your Order!
       </h1>
-      <p className="text-lg text-white mb-4">
-     This is a dummy model with a hope that it will be industry-level ready one day!
-    </p>
-    <p className="text-white opacity-80 mb-6">
-     Your items will reach you one day using this site..
-    </p>
 
+      {/* Short description */}
+      <p className="text-lg md:text-xl opacity-90 mb-8 max-w-xl">
+        We appreciate your trust in GenZWear. Your order is being processed and will be on its way soon.
+      </p>
 
-
-  <GlowingButton
-              label="View Your Orders"
-              onClick={() => navigate('/Orders')}
-            />
-
-
-
- <FancyButton
-        label="Continue Shopping"
-        onClick={() => navigate('/products')}
-      />
-
-
-
-
-
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <GlowingButton
+          label="View Your Orders"
+          onClick={() => navigate('/Orders')}
+        />
+        <FancyButton
+          label="Continue Shopping"
+          onClick={() => navigate('/products')}
+        />
+      </div>
     </div>
   );
 }

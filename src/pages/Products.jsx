@@ -47,9 +47,7 @@ function Products() {
         `${import.meta.env.VITE_API_URL}/api/cart`,
         { productId, quantity },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       toast.success('Product added to cart!');
@@ -60,35 +58,47 @@ function Products() {
   };
 
   return (
-    <div className="px-4 sm:px-6 py-8">
+    <div className="px-4 sm:px-6 py-8 bg-gray-50 min-h-screen">
+      {/* Header */}
       <div className="text-center mb-10">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-purple-800 mb-2">
-          Explore Our Latest Styles ✨
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 tracking-tight">
+          Discover Your Style
         </h2>
-        <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base">
-          From streetwear to classics — shop your vibe from our finest collection.
+        <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">
+          Curated fashion picks for every mood — minimal, trendy, and timeless.
         </p>
       </div>
 
+      {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products
           .filter((p) => p.title.toLowerCase().includes(query.toLowerCase()))
           .map((product) => (
             <div
               key={product._id}
-              className="bg-white border border-purple-100 rounded-xl p-4 shadow-sm hover:shadow-lg transform hover:scale-[1.02] transition duration-300 flex flex-col"
+              className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col"
             >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-48 sm:h-56 object-contain bg-white rounded-md"
-              />
-              <h3 className="mt-3 text-lg sm:text-xl font-semibold text-gray-800 truncate">
+              {/* Product Image */}
+              <div className="relative">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-full h-48 sm:h-56 object-contain bg-white rounded-md"
+                />
+              </div>
+
+              {/* Product Details */}
+              <h3 className="mt-4 text-lg sm:text-xl font-medium text-gray-900 line-clamp-1">
                 {product.title}
               </h3>
-              <p className="text-purple-700 font-bold text-base mt-1">₹{product.price}</p>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">{product.desc}</p>
+              <p className="text-amber-600 font-semibold text-base mt-1">
+                ₹{product.price}
+              </p>
+              <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                {product.desc}
+              </p>
 
+              {/* Quantity Selector */}
               <div className="mt-3 flex items-center space-x-2">
                 <label htmlFor={`qty-${product._id}`} className="text-sm text-gray-600">
                   Qty:
@@ -97,7 +107,7 @@ function Products() {
                   id={`qty-${product._id}`}
                   value={quantities[product._id] || 1}
                   onChange={(e) => handleQuantityChange(product._id, e.target.value)}
-                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                  className="border border-gray-300 rounded px-2 py-1 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-400"
                 >
                   {[1, 2, 3, 4, 5].map((qty) => (
                     <option key={qty} value={qty}>{qty}</option>
@@ -105,9 +115,10 @@ function Products() {
                 </select>
               </div>
 
+              {/* Add to Cart Button */}
               <button
                 onClick={() => handleAddToCart(product._id)}
-                className="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-md transition"
+                className="mt-4 w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-md transition font-medium"
               >
                 Add to Cart
               </button>
@@ -115,10 +126,11 @@ function Products() {
           ))}
       </div>
 
+      {/* Floating Cart Button */}
       {token && (
         <button
           onClick={() => navigate('/cart')}
-          className="fixed bottom-6 right-6 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-5 rounded-full shadow-lg z-50 transition duration-200"
+          className="fixed bottom-6 right-6 bg-gray-900 hover:bg-gray-800 text-white font-semibold py-2 px-5 rounded-full shadow-lg z-50 transition duration-200"
         >
           🛒 Go to Cart
         </button>

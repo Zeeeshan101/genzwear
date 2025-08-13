@@ -1,63 +1,62 @@
-import GlowingButton from '../components/GlowingButton';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-
-
-
-
-function Home() {
-
-    const navigate = useNavigate();
-
+export default function Home() {
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage:
-          "url('https://plus.unsplash.com/premium_vector-1726220684582-5e82e0e62dd4?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
-      }}
-    >
-      {/* soften background for readability */}
-      <div className="backdrop-brightness-90 min-h-screen flex flex-col">
+    <div className="bg-white">
+      {/* HERO SECTION */}
+      <section className="relative w-full h-[80vh] flex items-center justify-center bg-cover bg-center" 
+        style={{ backgroundImage: "url('https://effortlessgent.com/wp-content/uploads/2021/07/FeatureImage_01-2.jpeg')" }}>
+        <div className="absolute inset-0 bg-black/30" /> {/* Overlay for contrast */}
+        <div className="relative text-center text-white px-4">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-wide uppercase">
+            New Season, New Style
+          </h1>
+          <p className="mt-4 text-lg sm:text-xl max-w-lg mx-auto">
+            Discover the latest trends in fashion and make them yours.
+          </p>
+          <Link to="/products">
+            <button className="mt-6 px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-100 transition">
+              Shop Now
+            </button>
+          </Link>
+        </div>
+      </section>
 
-        {/* Hero Section */}
-        <section className="flex-1 flex items-center justify-center px-4 py-12">
-          <div className="text-center bg-white/80 p-6 rounded-md shadow-md">
-            <h1 className="text-4xl sm:text-5xl font-bold text-purple-700 mb-4">
-              Welcome to The GenZ Store 
-            </h1>
-            <p className="text-lg text-gray-700 max-w-xl mx-auto">
-              Discover the latest fashion trends at unbeatable prices.
-            </p>
-            <p className="text-sm text-gray-600 mt-2">
-             Let's Make GenZ fashionable 👽
-            </p>
+      {/* CATEGORY BANNERS */}
+      <section className="py-12 px-4 sm:px-8 lg:px-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {[
+          { title: "Men", img: "https://image.hm.com/assets/hm/36/35/36358e696ce87313ca408f959be86073645dced1.jpg?imwidth=1260" },
+          { title: "Women", img: "https://xcdn.next.co.uk/common/items/default/default/itemimages/3_4Ratio/product/lge/F04400s.jpg?im=Resize,width=750" },
+          { title: "Accessories", img: "https://i0.wp.com/fashion2apparel.com/wp-content/uploads/2023/10/Fashion-Accessories.jpg?resize=600%2C400&quality=100&ssl=1" }
+        ].map((cat, i) => (
+          <Link key={i} to={`/products?category=${cat.title.toLowerCase()}`}>
+            <div className="relative group rounded-xl overflow-hidden cursor-pointer">
+              <img src={cat.img} alt={cat.title} className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-white text-xl font-semibold">{cat.title}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </section>
 
-          <GlowingButton
-            label="Explore Products"
-            onClick={() => navigate('/products')}
-          />
-          
-          </div>
-        </section>
+      {/* COLLECTION HIGHLIGHT */}
+      <section className="py-16 bg-gray-50 text-center px-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-800">Featured Collection</h2>
+        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          Explore our handpicked outfits that define this season's trend.
+        </p>
+        <div className="mt-8">
+          <Link to="/products">
+            <button className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition">
+              View Collection
+            </button>
+          </Link>
+        </div>
+      </section>
 
-        {/* Info Section */}
-        <section className="py-10 px-4">
-          <div className="max-w-3xl mx-auto text-center bg-white/90 p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold text-purple-800 mb-4">
-              What You Will Find Here
-            </h2>
-            <p className="text-gray-700">
-              A clothing store demo built with MERN stack and Tailwind CSS. You can register,
-              login, browse products, add to cart, and place orders. The UI is responsive and built
-              to reflect real-world practices.
-            </p>
-          </div>
-        </section>
-
-      </div>
+      
     </div>
   );
 }
-
-export default Home;

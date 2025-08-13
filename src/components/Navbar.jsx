@@ -1,23 +1,15 @@
 import { useSearch } from '../context/SearchContext';
-
-
-import { Link, useNavigate } from 'react-router-dom';
-
-import { useLocation } from 'react-router-dom'; // will use it to get the path for products page and use it show search//
-
-
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import GlowingButton from '../components/GlowingButton';
+import FancyButton from '../components/FancyButton';
 
 function Navbar() {
   const navigate = useNavigate();
-
   const location = useLocation();
 
   const token = localStorage.getItem('token');
-
   const name = localStorage.getItem('name');
-
   const { query, setQuery } = useSearch();
-
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -26,80 +18,64 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-purple-700 shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+    <nav className="bg-black shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4 flex-nowrap">
 
-
-        <div className="flex items-center space-x-6">
-         <Link
-  to="/"
-  className="text-white text-3xl sm:text-4xl font-extrabold tracking-wide hover:text-purple-300 transition duration-300"
->
-  <span className="text-purple-100">Gen</span>
-  <span className="text-purple-300">Z</span>
-  <span className="text-purple-200">Wear</span>
-</Link>
-
-          <Link to="/products" className="text-white text-md hover:text-purple-200">
-            Products
+        {/* Left side: Logo + Links */}
+        <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="text-white text-3xl font-extrabold tracking-wide hover:text-gray-300 transition duration-300"
+          >
+            <span className="text-white">Gen</span>
+            <span className="text-gray-300">Z</span>
+            <span className="text-gray-400">Wear</span>
           </Link>
-          {token && (
-            <Link to="/cart" className="text-white text-md hover:text-purple-200">
-              Cart
-            </Link>
-          )}
+
+          <GlowingButton label="Products" onClick={() => navigate('/products')} />
 
           {token && (
-          <Link to="/orders" className="text-white text-md hover:text-purple-200 pr-2">
-          Orders
-         </Link>
+            <>
+              <GlowingButton label="Cart" onClick={() => navigate('/cart')} />
+              <GlowingButton label="Orders" onClick={() => navigate('/orders')} />
+            </>
           )}
-
-
         </div>
 
-  {location.pathname === "/products" && (
-  <div className="relative">
-    <input
-      type="text"
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      placeholder="What are you looking for GenZ ? "
-      className="pl-10 pr-4 py-2 rounded-full bg-white text-sm text-gray-800 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-md transition-all duration-300 w-full sm:w-80 md:w-96"
+        {/* Middle: Search bar (only on products page) */}
+        {location.pathname === "/products" && (
+          <div className="hidden md:block">
+            <div className="relative">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search for the latest GenZ fashion..."
+                className="pl-10 pr-4 py-2 rounded-full bg-white text-sm text-gray-800 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 shadow-md transition-all duration-300 w-72"
+              />
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                🔍
+              </span>
+            </div>
+          </div>
+        )}
 
-    />
-    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-      🔍
-    </span>
-  </div>
-)}
-
-
-
-        <div className="flex items-center space-x-4">
+        {/* Right side: Auth buttons / User info */}
+        <div className="flex items-center gap-3">
           {token ? (
             <>
-              <span className="text-white text-sm sm:text-base">Hi, {name} 👋</span>
-
-             <button
-              onClick={handleLogout}
-            className="bg-purple-100 text-purple-800 border border-purple-300 hover:bg-purple-200 px-4 py-1 rounded transition duration-200"
-            >
-             Logout
-            </button>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 font-semibold shadow-sm px-3 py-1 rounded-full border border-gray-600">
+                Hi, {name} 👋
+              </span>
+              <GlowingButton label="Logout" onClick={handleLogout} />
             </>
           ) : (
             <>
-              <Link to="/login" className="text-white hover:text-purple-200">
-                Login
-              </Link>
-              <Link to="/signup" className="text-white hover:text-purple-200">
-                Signup
-              </Link>
+              <GlowingButton label="Login" onClick={() => navigate('/login')} />
+              <FancyButton label="Signup" onClick={() => navigate('/signup')} />
             </>
           )}
         </div>
-
       </div>
     </nav>
   );
