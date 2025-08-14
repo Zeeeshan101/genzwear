@@ -4,10 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 
+//razorpay script//
+
+function loadRazorpayScript(src) {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+const [isPlacing, setIsPlacing] = useState(false);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -66,18 +92,75 @@ function Cart() {
   };
 
   const handleCheckout = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/orders`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      toast.success('Order placed successfully!');
-      navigate('/Thankyou');
-    } catch (err) {
-      console.error('Checkout failed:', err);
-      alert('Something went wrong during checkout');
-    }
-  };
+  if (isPlacing) return;
+  setIsPlacing(true);
+
+  const res = await loadRazorpayScript("https://checkout.razorpay.com/v1/checkout.js");
+  if (!res) {
+    toast.error("Failed to load payment gateway");
+    setIsPlacing(false);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    // Step 1: Create Razorpay order from backend
+    const { data: orderData } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/payment/create-payment-link`,
+      { amount: getTotal() },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Step 2: Open Razorpay payment popup
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID, // from Razorpay dashboard
+      amount: orderData.amount,
+      currency: orderData.currency,
+      name: "GenZ Store",
+      description: "Order Payment",
+      order_id: orderData.id,
+      handler: async function (response) {
+        // Step 3: Verify payment
+        const verifyRes = await axios.post(
+          `${import.meta.env.VITE_API_URL}/payment/verify-payment`,
+          response,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (verifyRes.data.success) {
+          // Step 4: Place order in DB
+          await axios.post(
+            `${import.meta.env.VITE_API_URL}/api/orders`,
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          toast.success("Order placed successfully!");
+          navigate("/Thankyou");
+        } else {
+          toast.error("Payment verification failed");
+        }
+      },
+      prefill: {
+        email: "test@example.com",
+        contact: "9876543210"
+      },
+      theme: {
+        color: "#000000"
+      }
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Checkout failed");
+  } finally {
+    setIsPlacing(false);
+  }
+};
+
 
   return (
     <div className="w-full px-4 sm:px-10 lg:px-24 py-10 bg-gray-50 min-h-screen">
